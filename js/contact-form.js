@@ -1,3 +1,5 @@
+import config from './config.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contact-form');
 
@@ -16,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Send the data to the API
-        fetch('https://674a010a868020296633647e.mockapi.io/messages', {
+        fetch(config.API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
