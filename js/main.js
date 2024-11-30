@@ -1,25 +1,3 @@
-// Cursor effect
-const cursor = document.createElement('div');
-cursor.className = 'cursor';
-document.body.appendChild(cursor);
-
-const cursorDot = document.createElement('div');
-cursorDot.className = 'cursor-dot';
-document.body.appendChild(cursorDot);
-
-document.addEventListener('mousemove', (e) => {
-    gsap.to(cursor, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.5
-    });
-    gsap.to(cursorDot, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.1
-    });
-});
-
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
