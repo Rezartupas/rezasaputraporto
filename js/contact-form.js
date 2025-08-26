@@ -1,39 +1,41 @@
-import config from './config.js';
+import { emailjsConfig } from './config.js';
 
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('contact-form');
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
-
-        // Prepare the data to be sent
-        const data = {
-            name: name,
-            email: email,
-            message: message
-        };
-
-        // Send the data to the API
-        fetch(config.API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert('Message sent successfully!');
-            form.reset(); // Reset the form after successful submission
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('There was an error sending your message. Please try again.');
+(function() {
+    // Inisialisasi EmailJS dengan Public Key Anda
+    if (emailjsConfig.publicKey) {
+        emailjs.init({
+            publicKey: emailjsConfig.publicKey,
         });
-    });
+    } else {
+        console.error("EmailJS Public Key is not defined in config.js");
+    }
+})();
+
+window.addEventListener('load', function() {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            submitButton.textContent = 'Sending...';
+            submitButton.disabled = true;
+
+            emailjs.sendForm(emailjsConfig.serviceId, emailjsConfig.templateId, this)
+                .then(() => {
+                    submitButton.textContent = 'Message Sent!';
+                    alert('Your message has been sent successfully!');
+                    contactForm.reset(); // Mengosongkan field formulir
+                }, (err) => {
+                    submitButton.textContent = 'Send Failed';
+                    alert('Failed to send message. Error: ' + JSON.stringify(err));
+                }).finally(() => {
+                    setTimeout(() => {
+                        submitButton.textContent = originalButtonText;
+                        submitButton.disabled = false;
+                    }, 5000); // Reset tombol setelah 5 detik
+                });
+        });
+    }
 });

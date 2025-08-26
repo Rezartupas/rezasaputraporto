@@ -1,5 +1,5 @@
-const config = {
-    API_URL: 'https://674a010a868020296633647e.mockapi.io/messages'
+export const emailjsConfig = {
+    publicKey: 'Nyz-z11LD0UZ1SVYD', 
+    serviceId: 'service_ueo14gx',
+    templateId: 'template_64x61yn', 
 };
-
-export default config;
